@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patient Support</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="container">
+    <h1>Financial Support</h1>
+
+    <!-- Apply Support Form -->
+    <div class="support-form">
+        <input type="text" id="prescription" placeholder="Prescription / Treatment">
+        <input type="number" id="cost" placeholder="Treatment Cost">
+        <button onclick="applySupport()">Apply</button>
+    </div>
+
+    <hr>
+    <h2>My Support Requests</h2>
+    <div id="status">Loading...</div>
+</div>
+
+<script src="js/support.js"></script>
+</body>
+</html>

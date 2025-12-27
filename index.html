@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DiaTrack+ Login/Register</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="container">
+    <h1>DiaTrack+</h1>
+
+    <!-- LOGIN -->
+    <div id="loginDiv">
+        <h2>Login</h2>
+        <select id="loginRole">
+            <option value="">Select Role</option>
+            <option value="patient">Patient</option>
+            <option value="sponsor">Sponsor</option>
+        </select>
+        <input type="email" id="loginEmail" placeholder="Email">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p>No account? <span class="link" onclick="showRegister()">Register</span></p>
+        <p id="loginMsg" class="msg"></p>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="registerDiv" style="display:none">
+        <h2>Register</h2>
+        <select id="regRole">
+            <option value="">Register As</option>
+            <option value="patient">Patient</option>
+            <option value="sponsor">Sponsor</option>
+        </select>
+        <input type="text" id="regName" placeholder="Full Name">
+        <input type="email" id="regEmail" placeholder="Email">
+        <input type="password" id="regPassword" placeholder="Password">
+        <input type="number" id="regAge" placeholder="Age (Patients only)">
+        <select id="regGender">
+            <option value="">Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
+        <button onclick="register()">Register</button>
+        <p class="link" onclick="showLogin()">Back to Login</p>
+        <p id="regMsg" class="msg"></p>
+    </div>
+</div>
+<script src="js/auth.js"></script>
+</body>
+</html>

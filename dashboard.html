@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DiaTrack+ Dashboard</title>
+<link rel="stylesheet" href="css/style.css">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Voice Recognition -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
+</head>
+<body>
+<div class="container">
+  <h1>Welcome, <span id="userName"></span></h1>
+  <button onclick="logout()">Logout</button>
+  <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+
+  <hr>
+  <h2>Health Readings</h2>
+  <div class="field">
+    <input id="glucose" type="number" placeholder="Glucose">
+    <button onclick="voiceInput('glucose')">🎤</button>
+  </div>
+  <div class="field">
+    <input id="systolic" type="number" placeholder="Systolic">
+    <input id="diastolic" type="number" placeholder="Diastolic">
+    <button onclick="voiceInput('bp')">🎤</button>
+  </div>
+  <div class="field">
+    <input id="heartRate" type="number" placeholder="Heart Rate">
+    <button onclick="voiceInput('heartRate')">🎤</button>
+  </div>
+  <div class="field">
+    <input id="weight" type="number" placeholder="Weight">
+    <button onclick="voiceInput('weight')">🎤</button>
+  </div>
+  <button onclick="saveReading()">Save Reading</button>
+  <button onclick="generateReport()">Download Report</button>
+
+  <div id="readings"></div>
+
+  <hr>
+  <h2>Charts</h2>
+  <canvas id="glucoseChart"></canvas>
+  <canvas id="bpChart"></canvas>
+
+  <hr>
+  <h2>Medicine Reminder</h2>
+  <input id="medName" placeholder="Medicine Name">
+  <input id="medTime" type="time">
+  <button onclick="setMedicineReminder()">Set Reminder</button>
+
+  <hr>
+  <h2>Diet Tracker / Calorie Finder</h2>
+  <input type="file" id="foodImage" accept="image/*">
+  <button onclick="analyzeFood()">Analyze</button>
+  <div id="dietResult"></div>
+
+  <hr>
+  <h2>Emergency SOS</h2>
+  <input id="sosContact" placeholder="Emergency Contact">
+  <button onclick="saveSOSContact()">Save Contact</button>
+  <button class="danger" onclick="sosAlert()">🚨 SOS</button>
+
+  <hr>
+  <h2>Maps</h2>
+  <input id="dropLocation" placeholder="Drop Location">
+  <button onclick="showCurrentLocation()">Current Location</button>
+  <button onclick="showNearbyHospitals()">Nearby Hospitals</button>
+  <button onclick="showRoute()">Show Route</button>
+  <div id="map"></div>
+
+  <hr>
+  <button onclick="goToSupport()">Apply for Support</button>
+</div>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
