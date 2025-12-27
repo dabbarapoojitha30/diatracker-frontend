@@ -1,6 +1,4 @@
-// js/auth.js
 const API_URL = "https://diatracker-backend.onrender.com";
-
 
 // ---------- TOGGLE UI ----------
 window.showRegister = () => {
@@ -21,26 +19,27 @@ window.register = async () => {
     const password = document.getElementById("regPassword").value;
     const age = document.getElementById("regAge").value;
     const gender = document.getElementById("regGender").value;
+    const msg = document.getElementById("regMsg");
 
     if (!role || !name || !email || !password) {
-        document.getElementById("regMsg").innerText = "Please fill required fields";
+        msg.innerText = "Please fill required fields";
         return;
     }
 
     try {
-        const res = await fetch(`${API_URL}/api/register`, {
+        const res = await fetch(`${API_URL}/api/auth/register`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ role, name, email, password, age, gender })
         });
 
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Registration failed");
+        if (!res.ok) throw new Error(data.message || "Registration failed");
 
         alert("Registered successfully! Please login.");
         showLogin();
     } catch (err) {
-        document.getElementById("regMsg").innerText = err.message;
+        msg.innerText = err.message;
     }
 };
 
@@ -49,32 +48,33 @@ window.login = async () => {
     const role = document.getElementById("loginRole").value;
     const email = document.getElementById("loginEmail").value.trim();
     const password = document.getElementById("loginPassword").value;
+    const msg = document.getElementById("loginMsg");
 
     if (!role || !email || !password) {
-        document.getElementById("loginMsg").innerText = "Enter all fields";
+        msg.innerText = "Enter all fields";
         return;
     }
 
     try {
-        const res = await fetch(`${API_URL}/api/login`, {
+        const res = await fetch(`${API_URL}/api/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ role, email, password })
         });
 
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Login failed");
+        if (!res.ok) throw new Error(data.message || "Login failed");
 
-        // ✅ STORE USER CONSISTENTLY
+        // Save user
         localStorage.setItem("user", JSON.stringify(data.user));
 
-        // ✅ ROLE-BASED REDIRECT
+        // Redirect
         if (data.user.role === "patient") {
             window.location.href = "dashboard.html";
         } else {
             window.location.href = "sponsor.html";
         }
     } catch (err) {
-        document.getElementById("loginMsg").innerText = err.message;
+        msg.innerText = err.message;
     }
 };
