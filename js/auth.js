@@ -1,3 +1,4 @@
+// js/auth.js
 const API_URL = "https://diatracker-backend.onrender.com";
 
 // ---------- TOGGLE UI ----------
@@ -19,10 +20,9 @@ window.register = async () => {
     const password = document.getElementById("regPassword").value;
     const age = document.getElementById("regAge").value;
     const gender = document.getElementById("regGender").value;
-    const msg = document.getElementById("regMsg");
 
     if (!role || !name || !email || !password) {
-        msg.innerText = "Please fill required fields";
+        document.getElementById("regMsg").innerText = "Please fill required fields";
         return;
     }
 
@@ -34,12 +34,12 @@ window.register = async () => {
         });
 
         const data = await res.json();
-        if (!res.ok) throw new Error(data.message || "Registration failed");
+        if (!res.ok) throw new Error(data.error || "Registration failed");
 
         alert("Registered successfully! Please login.");
         showLogin();
     } catch (err) {
-        msg.innerText = err.message;
+        document.getElementById("regMsg").innerText = err.message;
     }
 };
 
@@ -48,10 +48,9 @@ window.login = async () => {
     const role = document.getElementById("loginRole").value;
     const email = document.getElementById("loginEmail").value.trim();
     const password = document.getElementById("loginPassword").value;
-    const msg = document.getElementById("loginMsg");
 
     if (!role || !email || !password) {
-        msg.innerText = "Enter all fields";
+        document.getElementById("loginMsg").innerText = "Enter all fields";
         return;
     }
 
@@ -63,18 +62,16 @@ window.login = async () => {
         });
 
         const data = await res.json();
-        if (!res.ok) throw new Error(data.message || "Login failed");
+        if (!res.ok) throw new Error(data.error || "Login failed");
 
-        // Save user
         localStorage.setItem("user", JSON.stringify(data.user));
 
-        // Redirect
         if (data.user.role === "patient") {
             window.location.href = "dashboard.html";
         } else {
             window.location.href = "sponsor.html";
         }
     } catch (err) {
-        msg.innerText = err.message;
+        document.getElementById("loginMsg").innerText = err.message;
     }
 };
