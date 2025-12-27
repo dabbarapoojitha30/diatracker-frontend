@@ -1,4 +1,5 @@
-const API_URL = "http://localhost:5000";
+const API_URL = "https://diatracker-backend.onrender.com";
+
 const user = JSON.parse(localStorage.getItem("user"));
 
 if (!user || user.role !== "patient") {
@@ -106,41 +107,66 @@ async function loadReadings() {
 let glucoseChart, bpChart;
 
 async function renderCharts() {
-    const res = await fetch(`${API_URL}/api/readings/${user._id}`);
-    const data = await res.json();
+    try {
+        const res = await fetch(`${API_URL}/api/readings/${user._id}`);
+        const data = await res.json();
 
-    const labels = data.map(d => new Date(d.date).toLocaleDateString());
-    const gData = data.map(d => d.glucose);
-    const sData = data.map(d => d.systolic);
-    const dData = data.map(d => d.diastolic);
+        console.log("Readings data:", data);
 
-    if (glucoseChart) glucoseChart.destroy();
-    if (bpChart) bpChart.destroy();
+        if (!data || !Array.isArray(data) || data.length === 0) {
+            console.warn("No readings data to render charts");
+            return;
+        }
 
-    glucoseChart = new Chart(
-        document.getElementById("glucoseChart"),
-        {
+        const labels = data.map(d => new Date(d.date).toLocaleDateString());
+        const gData = data.map(d => d.glucose || 0);
+        const sData = data.map(d => d.systolic || 0);
+        const dData = data.map(d => d.diastolic || 0);
+
+        if (glucoseChart) glucoseChart.destroy();
+        if (bpChart) bpChart.destroy();
+
+        const glucoseCtx = document.getElementById("glucoseChart").getContext("2d");
+        glucoseChart = new Chart(glucoseCtx, {
             type: "line",
             data: {
                 labels,
-                datasets: [{ label: "Glucose", data: gData, borderColor: "blue" }]
+                datasets: [{
+                    label: "Glucose",
+                    data: gData,
+                    borderColor: "blue",
+                    backgroundColor: "rgba(0,0,255,0.1)",
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: true } },
+                scales: { y: { beginAtZero: false } }
             }
-        }
-    );
+        });
 
-    bpChart = new Chart(
-        document.getElementById("bpChart"),
-        {
+        const bpCtx = document.getElementById("bpChart").getContext("2d");
+        bpChart = new Chart(bpCtx, {
             type: "line",
             data: {
                 labels,
                 datasets: [
-                    { label: "Systolic", data: sData, borderColor: "red" },
-                    { label: "Diastolic", data: dData, borderColor: "orange" }
+                    { label: "Systolic", data: sData, borderColor: "red", fill: false },
+                    { label: "Diastolic", data: dData, borderColor: "orange", fill: false }
                 ]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: true } },
+                scales: { y: { beginAtZero: false } }
             }
-        }
-    );
+        });
+
+    } catch (err) {
+        console.error("Error rendering charts:", err);
+    }
 }
 
 // ================= REPORT =================
@@ -205,6 +231,8 @@ window.showRoute = () => {
 // ================= SUPPORT =================
 window.goToSupport = () => location.href = "./patientsupport.html";
 
-// INIT
-loadReadings();
-renderCharts();
+// ================= INIT =================
+document.addEventListener("DOMContentLoaded", () => {
+    loadReadings();
+    renderCharts();
+});
